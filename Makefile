@@ -4,7 +4,7 @@ build:
 
 .PHONY: run archiver
 run archiver:
-	build/archiver pack vlc cmd/app/main.go
+	build/archiver pack vlc example.txt
 
 .PHONY: run
 run:
