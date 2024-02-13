@@ -2,8 +2,9 @@ package commands
 
 import (
 	"errors"
-	"github.com/buts00/Archiver/internal/lib/compression"
-	"github.com/buts00/Archiver/internal/lib/compression/vlc"
+	"github.com/buts00/Archiver/internal/compression"
+	"github.com/buts00/Archiver/internal/compression/methods"
+	"github.com/buts00/Archiver/internal/compression/methods/table/shannon-fano"
 	"github.com/spf13/cobra"
 	"io"
 	"log"
@@ -20,7 +21,7 @@ var packCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(packCmd)
-	packCmd.Flags().StringP("method", "m", "", "compression method: vlc")
+	packCmd.Flags().StringP("method", "m", "", "compression method: sf")
 	err := packCmd.MarkFlagRequired("method")
 	if err != nil {
 		log.Fatal(err)
@@ -29,7 +30,7 @@ func init() {
 
 var ErrEmptyPath = errors.New("path to file isn't specified")
 
-const packedExt = "vlc"
+const packedExt = "sf"
 
 func pack(cmd *cobra.Command, args []string) {
 	var encoder compression.Encoder
@@ -39,8 +40,8 @@ func pack(cmd *cobra.Command, args []string) {
 	filePath := args[0]
 	method := cmd.Flag("method").Value.String()
 	switch method {
-	case "vlc":
-		encoder = vlc.New()
+	case "shannon-fano":
+		encoder = methods.New(shannon_fano.NewGenerator())
 	default:
 		cmd.PrintErr("unknown method")
 	}

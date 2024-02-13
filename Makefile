@@ -2,13 +2,13 @@
 build:
 	rm -rf build && mkdir build &&  go build -o build/archiver -v ./cmd/app/
 
-.PHONY: run pack vlc
-run pack vlc:
-	build/archiver pack -m vlc example.txt
+.PHONY: pack_sf
+pack_sf:
+	build/archiver pack -m shannon-fano example.txt
 
-.PHONY: run unpack vlc
-run unpack vlc:
-	build/archiver unpack -m vlc example.vlc
+.PHONY: unpack_sf
+unpack_sf:
+	build/archiver unpack -m shannon-fano example.sf
 
 .PHONY: run
 run:

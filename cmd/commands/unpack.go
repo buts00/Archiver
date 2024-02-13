@@ -1,8 +1,9 @@
 package commands
 
 import (
-	"github.com/buts00/Archiver/internal/lib/compression"
-	"github.com/buts00/Archiver/internal/lib/compression/vlc"
+	"github.com/buts00/Archiver/internal/compression"
+	"github.com/buts00/Archiver/internal/compression/methods"
+	"github.com/buts00/Archiver/internal/compression/methods/table/shannon-fano"
 	"github.com/spf13/cobra"
 	"io"
 	"log"
@@ -19,8 +20,8 @@ var unPackCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(unPackCmd)
-	
-	unPackCmd.Flags().StringP("method", "m", "", "compression method: vlc")
+
+	unPackCmd.Flags().StringP("method", "m", "", "compression method: sf")
 	err := unPackCmd.MarkFlagRequired("method")
 	if err != nil {
 		log.Fatal(err)
@@ -42,8 +43,8 @@ func unpack(cmd *cobra.Command, args []string) {
 	}
 	method := cmd.Flag("method").Value.String()
 	switch method {
-	case "vlc":
-		decoder = vlc.New()
+	case "shannon-fano":
+		decoder = methods.New(shannon_fano.NewGenerator())
 	default:
 		cmd.PrintErr("unknown method")
 	}
